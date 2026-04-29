@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card shadow-sm p-4 border-primary">
+            <h3>Labot: {{ book.title }}</h3>
+            <form method="POST">
+                <div class="mb-3">
+                    <label class="form-label">Nosaukums</label>
+                    <input type="text" name="title" class="form-control" value="{{ book.title }}" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Autors</label>
+                    <input type="text" class="form-control" value="{{ book.author }}" readonly>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Gads</label>
+                    <input type="number" name="gads" class="form-control" value="{{ book.gads }}" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Žanrs</label>
+                    <select name="zanrs_id" class="form-select">
+                        {% for z in zanri %}
+                            <option value="{{ z.id }}" {% if z.id == book.zanrs_id %}selected{% endif %}>
+                                {{ z.name }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary w-100">Saglabāt izmaiņas</button>
+                <a href="/gramatas" class="btn btn-link w-100 mt-2 text-decoration-none">Atcelt</a>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
