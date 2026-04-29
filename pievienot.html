@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card shadow-sm p-4">
+            <h3>Pievienot grāmatu</h3>
+            <form method="POST">
+                <div class="mb-3">
+                    <label class="form-label">Grāmatas nosaukums</label>
+                    <input type="text" name="title" class="form-control" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Autors</label>
+                    <input type="text" name="author" class="form-control" placeholder="Ieraksti autora vārdu" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Izdošanas gads</label>
+                    <input type="number" name="gads" class="form-control" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Žanrs</label>
+                    <select name="zanrs_id" class="form-select">
+                        {% for z in zanri %}
+                            <option value="{{ z.id }}">{{ z.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-success w-100">Pievienot sarakstam</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
