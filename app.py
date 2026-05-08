@@ -137,7 +137,24 @@ def dzest(id):
     conn.close()
     return redirect(url_for('gramatas'))
 
-
+@app.route('/gramata/<int:id>')
+def detalas(id):
+    conn = get_db()
+    # Atlasām grāmatu, tās autoru un žanru pēc ID
+    query = '''
+        SELECT books.*, authors.name as author, zanri.name as zanrs 
+        FROM books 
+        JOIN authors ON books.author_id = authors.id
+        JOIN zanri ON books.zanrs_id = zanri.id
+        WHERE books.id = ?
+    '''
+    book = conn.execute(query, (id,)).fetchone()
+    conn.close()
+    
+    if book is None:
+        return "Grāmata netika atrasta!", 404
+        
+    return render_template('detalas.html', book=book)
 
 if __name__ == '__main__':
     app.run(debug=True) # debug=True palīdz redzēt kļūdas, ja kaut kas salūzt

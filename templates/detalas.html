@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/">Sākums</a></li>
+            <li class="breadcrumb-item active">{{ book.title }}</li>
+        </ol>
+    </nav>
+
+    <div class="card shadow-sm p-4">
+        <div class="row">
+            <div class="col-md-4 mb-3">
+                {% if book.bilde %}
+                    <img src="{{ url_for('static', filename='gramatas/' + book.bilde) }}" class="img-fluid rounded shadow" alt="{{ book.title }}">
+                {% else %}
+                    <div class="bg-light d-flex align-items-center justify-content-center rounded" style="height: 400px; border: 2px dashed #dee2e6;">
+                        <span class="text-muted">Nav bildes</span>
+                    </div>
+                {% endif %}
+            </div>
+            <div class="col-md-8">
+                <h1 class="display-5 fw-bold">{{ book.title }}</h1>
+                <p class="lead text-primary">Autors: <strong>{{ book.author }}</strong></p>
+                <hr>
+                <table class="table table-borderless">
+                    <tr>
+                        <th style="width: 150px;">Izdošanas gads:</th>
+                        <td>{{ book.gads }}</td>
+                    </tr>
+                    <tr>
+                        <th>Žanrs:</th>
+                        <td><span class="badge bg-secondary">{{ book.zanrs }}</span></td>
+                    </tr>
+                </table>
+                <div class="mt-4">
+                    <a href="/" class="btn btn-outline-secondary">Atpakaļ uz sākumu</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
