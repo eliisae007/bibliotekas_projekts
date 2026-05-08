@@ -1,37 +1,16 @@
-{% extends 'base.html' %}
-{% block content %}
-<div class="d-flex justify-content-between align-items-center mb-3">
-    <h2>Visas grāmatas</h2>
-    <a href="/pievienot" class="btn btn-success">Pievienot jaunu</a>
-</div>
+{% extends "base.html" %}
+{% block title %}Grāmatas - Bibliotēka{% endblock %}
 
-<div class="table-responsive">
-    <table class="table table-striped bg-white shadow-sm">
-        <thead class="table-dark">
-            <tr>
-                <th>Nosaukums</th>
-                <th>Autors</th>
-                <th>Gads</th>
-                <th>Žanrs</th>
-                <th>Darbības</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for b in books %}
-            <tr>
-                <td>{{ b.title }}</td>
-                <td>{{ b.author }}</td>
-                <td>{{ b.gads }}</td>
-                <td>{{ b.zanrs }}</td>
-                <td>
-                    <a href="/rediget/{{ b.id }}" class="btn btn-sm btn-primary">Labot</a>
-                    <form action="/dzest/{{ b.id }}" method="POST" style="display:inline;" onsubmit="return confirm('Tiešām dzēst?')">
-                        <button class="btn btn-sm btn-danger">Dzēst</button>
-                    </form>
-                </td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-</div>
+{% block content %}
+    <h2>Visas Grāmatas</h2>
+    
+    <div class="gramatu-saraksts">
+        {% for book in books %}
+            <div class="grāmata">
+                <img src="{{ url_for('static', filename='images/gramatas/' + book['image']) }}" alt="Grāmatas vāks">
+                <h3>{{ book["title"] }}</h3>
+                <p>Autors: {{ book["author"] }}</p>
+            </div>
+        {% endfor %}
+    </div>
 {% endblock %}
