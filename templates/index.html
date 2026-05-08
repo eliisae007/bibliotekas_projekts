@@ -1,9 +1,30 @@
 {% extends 'base.html' %}
 {% block content %}
-<div class="p-5 bg-white rounded shadow-sm text-center">
+<div class="p-4 bg-white rounded shadow-sm text-center mb-5">
     <h1>Sveiki! Šī ir mana bibliotēkas lapa.</h1>
     <p class="lead">Šeit var pārvaldīt grāmatas, autorus un žanrus.</p>
-    <hr>
-    <p>Izmanto augšējo izvēlni, lai redzētu sarakstu.</p>
+</div>
+
+<h2 class="mb-4">Mūsu grāmatas</h2>
+
+<div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4 mb-5">
+    {% for b in books %}
+    <div class="col">
+        <div class="card h-100 shadow-sm border-0">
+            {% if b.bilde %}
+                <img src="{{ url_for('static', filename='gramatas/' + b.bilde) }}" class="card-img-top" alt="{{ b.title }}" style="height: 300px; object-fit: cover;">
+            {% else %}
+                <div class="card-img-top bg-light d-flex align-items-center justify-content-center text-muted" style="height: 300px;">
+                    <span>Nav bildes</span>
+                </div>
+            {% endif %}
+            
+            <div class="card-body text-center bg-light">
+                <h5 class="card-title fw-bold mb-1">{{ b.title }}</h5>
+                <p class="card-text text-muted">{{ b.author }}</p>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
 </div>
 {% endblock %}

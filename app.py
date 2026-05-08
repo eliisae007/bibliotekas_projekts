@@ -51,7 +51,20 @@ def get_db():
 
 @app.route('/') # Galvenā lapa (index)
 def index():
-    return render_template('index.html')
+    conn = get_db()
+    # Dabūjam grāmatas kopā ar autora vārdu
+    query = '''
+        SELECT books.*, authors.name as author 
+        FROM books 
+        JOIN authors ON books.author_id = authors.id
+    '''
+    books = conn.execute(query).fetchall()
+    conn.close()
+    return render_template('index.html', books=books)
+
+@app.route('/par_mums') # Par mums lapa
+def par_mums():
+    return render_template('par_mums.html')
 
 @app.route('/gramatas') # Grāmatu saraksta skats
 def gramatas():
