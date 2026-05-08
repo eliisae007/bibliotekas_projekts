@@ -47,7 +47,6 @@ def index():
 @app.route('/gramatas') 
 def gramatas():
     conn = get_db()
-    # Paņemam arī 'image' no datubāzes
     query = '''
         SELECT books.*, authors.name as author, zanri.name as zanrs 
         FROM books 
@@ -60,12 +59,10 @@ def gramatas():
 
 @app.route('/par-mums')
 def about():
-    # Jauna lapa "Par mums" [kā paraugā]
     return render_template('par_mums.html')
 
 @app.errorhandler(404)
 def page_not_found(e):
-    # 404 kļūdu lapa [kā paraugā]
     return render_template('404.html'), 404
 
 @app.route('/pievienot', methods=('GET', 'POST')) 
