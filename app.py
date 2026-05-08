@@ -46,7 +46,7 @@ init_db()
 # Vienkārša funkcija, lai katru reizi nav jāraksta pieslēgšanās
 def get_db():
     conn = sqlite3.connect('database.db')
-    conn.row_factory = sqlite3.Row # Šitas palīdz dabūt datus pēc nosaukumiem
+    conn.row_factory = sqlite3.Row # Šitais palīdz dabūt datus pēc nosaukumiem
     return conn
 
 @app.route('/') # Galvenā lapa (index)
@@ -62,7 +62,7 @@ def index():
     conn.close()
     return render_template('index.html', books=books)
 
-@app.route('/par_mums') # Par mums lapa
+@app.route('/par_mums')
 def par_mums():
     return render_template('par_mums.html')
 
@@ -82,20 +82,30 @@ def gramatas():
 
 
 
-@app.route('/rediget/<int:id>', methods=('GET', 'POST')) # Datu labošana
+@app.route('/rediget/<int:id>', methods=('GET', 'POST'))
 def rediget(id):
     conn = get_db()
     if request.method == 'POST':
-        # Updeitojam tikai tos datus, ko ļaujam mainīt
-        conn.execute('UPDATE books SET title=?, gads=?, zanrs_id=? WHERE id=?', 
-                     (request.form['title'], request.form['gads'], request.form['zanrs_id'], id))
+        title = request.form['title']
+        gads = request.form['gads']
+        author_id = request.form['author_id'] # Saņemam ID no dropdown
+        zanrs_id = request.form['zanrs_id']
+        
+        # Atjauninām datubāzi ar jauno autora ID
+        conn.execute('UPDATE books SET title=?, gads=?, author_id=?, zanrs_id=? WHERE id=?', 
+                     (title, gads, author_id, zanrs_id, id))
         conn.commit()
+        conn.close()
         return redirect(url_for('gramatas'))
     
-    # Atrodam konkrēto grāmatu, ko gribam labot
-    book = conn.execute('SELECT books.*, authors.name as author FROM books JOIN authors ON books.author_id = authors.id WHERE books.id=?', (id,)).fetchone()
+    # Dabūjam konkrēto grāmatu
+    book = conn.execute('SELECT * FROM books WHERE id=?', (id,)).fetchone()
+    # Dabūjam visus žanrus un visus autorus sarakstiem
     zanri = conn.execute('SELECT * FROM zanri').fetchall()
-    return render_template('rediget.html', book=book, zanri=zanri)
+    autori = conn.execute('SELECT * FROM authors ORDER BY name ASC').fetchall()
+    conn.close()
+    
+    return render_template('rediget.html', book=book, zanri=zanri, autori=autori)
 
 @app.route('/dzest/<int:id>', methods=('POST',)) # Grāmatas dzēšana
 def dzest(id):
@@ -124,7 +134,6 @@ def detalas(id):
         
     return render_template('detalas.html', book=book)
 
-# 1. Jaunais maršruts autora pievienošanai
 @app.route('/pievienot_autoru', methods=('GET', 'POST'))
 def pievienot_autoru():
     if request.method == 'POST':
@@ -139,7 +148,6 @@ def pievienot_autoru():
             
     return render_template('pievienot_autoru.html')
 
-# 2. Atjaunotā pievienot() funkcija
 @app.route('/pievienot', methods=('GET', 'POST'))
 def pievienot():
     conn = get_db()

@@ -1,4 +1,4 @@
-/* Definējam galvenās krāsas */
+/* galvenās krāsas */
 :root {
     --dark-rose: #720917;
     --medium-rose: #a01a34;
@@ -12,7 +12,6 @@ body {
     color: #333;
 }
 
-/* Navigācijas josla */
 .navbar-rose {
     background-color: var(--dark-rose) !important;
     box-shadow: 0 2px 10px rgba(0,0,0,0.2);
@@ -26,7 +25,6 @@ body {
     color: var(--gold-accent) !important;
 }
 
-/* Kartiņas (E-veikala stils) */
 .card {
     border: none;
     border-radius: 12px;
@@ -44,7 +42,6 @@ body {
     font-weight: 700;
 }
 
-/* Pogas - visas būs "Dark Rose" krāsā */
 .btn-rose {
     background-color: var(--dark-rose);
     color: white;
@@ -60,7 +57,7 @@ body {
     box-shadow: 0 4px 8px rgba(0,0,0,0.2);
 }
 
-/* Galvenās lapas (Index) lielais virsraksts */
+/* lielais virsraksts */
 .hero-section {
     background: linear-gradient(135deg, var(--dark-rose) 0%, var(--medium-rose) 100%);
     color: white;
@@ -80,4 +77,26 @@ body {
 .btn-outline-rose:hover {
     background-color: var(--dark-rose);
     color: white;
+}
+
+.navbar-logo {
+    height: 40px;
+    width: auto;
+    border-radius: 5px;
+}
+
+.footer {
+    background-color: var(--dark-rose);
+    border-top: 3px solid var(--gold-accent); /* Zelta akcents augšpusē */
+}
+
+.footer h5 {
+    color: var(--gold-accent);
+    font-size: 1.1rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.footer a:hover {
+    color: white !important;
 }

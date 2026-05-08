@@ -2,23 +2,36 @@
 {% block content %}
 <div class="row justify-content-center">
     <div class="col-md-6">
-        <div class="card shadow-sm p-4 border-primary">
-            <h3>Labot: {{ book.title }}</h3>
+        <div class="card shadow p-4">
+            <h3 style="color: var(--dark-rose);" class="mb-4">Labot grāmatu: {{ book.title }}</h3>
+            
             <form method="POST">
                 <div class="mb-3">
-                    <label class="form-label">Nosaukums</label>
+                    <label class="form-label font-weight-bold">Grāmatas nosaukums</label>
                     <input type="text" name="title" class="form-control" value="{{ book.title }}" required>
                 </div>
+
                 <div class="mb-3">
-                    <label class="form-label">Autors</label>
-                    <input type="text" class="form-control" value="{{ book.author }}" readonly>
+                    <label class="form-label font-weight-bold">Autors</label>
+                    <div class="d-flex gap-2">
+                        <select name="author_id" class="form-select" required>
+                            {% for a in autori %}
+                                <option value="{{ a.id }}" {% if a.id == book.author_id %}selected{% endif %}>
+                                    {{ a.name }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                        <a href="/pievienot_autoru" class="btn btn-outline-rose" title="Pievienot jaunu autoru">+</a>
+                    </div>
                 </div>
+
                 <div class="mb-3">
-                    <label class="form-label">Gads</label>
+                    <label class="form-label font-weight-bold">Izdošanas gads</label>
                     <input type="number" name="gads" class="form-control" value="{{ book.gads }}" required>
                 </div>
+
                 <div class="mb-3">
-                    <label class="form-label">Žanrs</label>
+                    <label class="form-label font-weight-bold">Žanrs</label>
                     <select name="zanrs_id" class="form-select">
                         {% for z in zanri %}
                             <option value="{{ z.id }}" {% if z.id == book.zanrs_id %}selected{% endif %}>
@@ -27,8 +40,11 @@
                         {% endfor %}
                     </select>
                 </div>
-                <button type="submit" class=" btn btn-rose w-100">Saglabāt izmaiņas</button>
-                <a href="/gramatas" class="btn btn-link w-100 mt-2 text-decoration-none">Atcelt</a>
+
+                <div class="mt-4">
+                    <button type="submit" class="btn btn-rose w-100">Saglabāt izmaiņas</button>
+                    <a href="/gramatas" class="btn btn-link w-100 mt-2 text-decoration-none" style="color: var(--medium-rose);">Atcelt</a>
+                </div>
             </form>
         </div>
     </div>
