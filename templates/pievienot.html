@@ -2,21 +2,33 @@
 {% block content %}
 <div class="row justify-content-center">
     <div class="col-md-6">
-        <div class="card shadow-sm p-4">
-            <h3>Pievienot grāmatu</h3>
+        <div class="card shadow p-4">
+            <h3 style="color: var(--dark-rose);" class="mb-4">Pievienot jaunu grāmatu</h3>
+            
             <form method="POST" enctype="multipart/form-data">
                 <div class="mb-3">
                     <label class="form-label">Grāmatas nosaukums</label>
                     <input type="text" name="title" class="form-control" required>
                 </div>
+
                 <div class="mb-3">
                     <label class="form-label">Autors</label>
-                    <input type="text" name="author" class="form-control" placeholder="Ieraksti autora vārdu" required>
+                    <div class="d-flex gap-2">
+                        <select name="author_id" class="form-select" required>
+                            <option value="" disabled selected>Izvēlies autoru...</option>
+                            {% for a in autori %}
+                                <option value="{{ a.id }}">{{ a.name }}</option>
+                            {% endfor %}
+                        </select>
+                        <a href="/pievienot_autoru" class="btn btn-outline-rose" title="Pievienot jaunu autoru">+</a>
+                    </div>
                 </div>
+
                 <div class="mb-3">
                     <label class="form-label">Izdošanas gads</label>
                     <input type="number" name="gads" class="form-control" required>
                 </div>
+
                 <div class="mb-3">
                     <label class="form-label">Žanrs</label>
                     <select name="zanrs_id" class="form-select">
@@ -25,11 +37,13 @@
                         {% endfor %}
                     </select>
                 </div>
-                <div class="mb-3">
-                   <label class="form-label">Grāmatas vāka bilde</label>
-                   <input type="file" name="bilde" class="form-control" accept="image/*">
+
+                <div class="mb-4">
+                    <label class="form-label">Vāka attēls</label>
+                    <input type="file" name="bilde" class="form-control" accept="image/*">
                 </div>
-                <button type="submit" class="btn btn-rose w-100">Pievienot sarakstam</button>
+
+                <button type="submit" class="btn btn-rose w-100 btn-lg">Pievienot bibliotēkai</button>
             </form>
         </div>
     </div>

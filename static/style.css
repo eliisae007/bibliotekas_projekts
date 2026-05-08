@@ -68,3 +68,16 @@ body {
     border-radius: 15px;
     margin-bottom: 40px;
 }
+
+.btn-outline-rose {
+    border: 2px solid var(--dark-rose);
+    color: var(--dark-rose);
+    background-color: transparent;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+.btn-outline-rose:hover {
+    background-color: var(--dark-rose);
+    color: white;
+}

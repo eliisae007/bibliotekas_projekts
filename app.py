@@ -80,39 +80,7 @@ def gramatas():
     conn.close()
     return render_template('gramatas.html', books=books)
 
-@app.route('/pievienot', methods=('GET', 'POST'))
-def pievienot():
-    conn = get_db()
-    if request.method == 'POST':
-        title = request.form['title']
-        gads = request.form['gads']
-        author_name = request.form['author']
-        zanrs_id = request.form['zanrs_id']
-        
-        # --- BILDES APSTRĀDE (Jaunums) ---
-        bilde = request.files.get('bilde') # Dabūjam failu no formas
-        bildes_nosaukums = ""
-        if bilde and bilde.filename:
-            bildes_nosaukums = bilde.filename
-            # Saglabājam bildi mapē
-            bilde.save(f"static/gramatas/{bildes_nosaukums}")
-        # ---------------------------------
-        
-        author = conn.execute('SELECT id FROM authors WHERE name = ?', (author_name,)).fetchone()
-        if author:
-            author_id = author['id']
-        else:
-            cur = conn.execute('INSERT INTO authors (name) VALUES (?)', (author_name,))
-            author_id = cur.lastrowid
-            
-        # Pievienojam arī "bilde" datubāzē
-        conn.execute('INSERT INTO books (title, gads, author_id, zanrs_id, bilde) VALUES (?, ?, ?, ?, ?)', 
-                     (title, gads, author_id, zanrs_id, bildes_nosaukums))
-        conn.commit()
-        return redirect(url_for('gramatas'))
-    
-    zanri = conn.execute('SELECT * FROM zanri').fetchall()
-    return render_template('pievienot.html', zanri=zanri)
+
 
 @app.route('/rediget/<int:id>', methods=('GET', 'POST')) # Datu labošana
 def rediget(id):
@@ -155,6 +123,49 @@ def detalas(id):
         return "Grāmata netika atrasta!", 404
         
     return render_template('detalas.html', book=book)
+
+# 1. Jaunais maršruts autora pievienošanai
+@app.route('/pievienot_autoru', methods=('GET', 'POST'))
+def pievienot_autoru():
+    if request.method == 'POST':
+        name = request.form['name']
+        if name:
+            conn = get_db()
+            conn.execute('INSERT INTO authors (name) VALUES (?)', (name,))
+            conn.commit()
+            conn.close()
+            # Pēc pievienošanas sūtām lietotāju atpakaļ uz grāmatas pievienošanu
+            return redirect(url_for('pievienot'))
+            
+    return render_template('pievienot_autoru.html')
+
+# 2. Atjaunotā pievienot() funkcija
+@app.route('/pievienot', methods=('GET', 'POST'))
+def pievienot():
+    conn = get_db()
+    if request.method == 'POST':
+        title = request.form['title']
+        gads = request.form['gads']
+        author_id = request.form['author_id'] # Tagad saņemam ID no dropdown
+        zanrs_id = request.form['zanrs_id']
+        
+        bilde = request.files.get('bilde')
+        bildes_nosaukums = ""
+        if bilde and bilde.filename:
+            bildes_nosaukums = bilde.filename
+            bilde.save(f"static/gramatas/{bildes_nosaukums}")
+        
+        conn.execute('INSERT INTO books (title, gads, author_id, zanrs_id, bilde) VALUES (?, ?, ?, ?, ?)', 
+                     (title, gads, author_id, zanrs_id, bildes_nosaukums))
+        conn.commit()
+        conn.close()
+        return redirect(url_for('gramatas'))
+    
+    # Atlasām gan žanrus, gan autorus priekš dropdown izvēlnēm
+    zanri = conn.execute('SELECT * FROM zanri').fetchall()
+    autori = conn.execute('SELECT * FROM authors ORDER BY name ASC').fetchall()
+    conn.close()
+    return render_template('pievienot.html', zanri=zanri, autori=autori)
 
 if __name__ == '__main__':
     app.run(debug=True) # debug=True palīdz redzēt kļūdas, ja kaut kas salūzt

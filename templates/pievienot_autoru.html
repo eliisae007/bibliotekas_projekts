@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card shadow p-4">
+            <h3 style="color: var(--dark-rose);">Pievienot jaunu autoru</h3>
+            <p class="text-muted small">Pievieno autoru, lai vēlāk to varētu izvēlēties pie grāmatu pievienošanas.</p>
+            
+            <form method="POST">
+                <div class="mb-3">
+                    <label class="form-label font-weight-bold">Autora vārds un uzvārds</label>
+                    <input type="text" name="name" class="form-control" placeholder="Piemēram, Imants Ziedonis" required>
+                </div>
+                <button type="submit" class="btn btn-rose w-100">Saglabāt autoru</button>
+                <a href="/pievienot" class="btn btn-link w-100 mt-2 text-decoration-none" style="color: var(--medium-rose);">Atpakaļ</a>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
