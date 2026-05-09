@@ -80,27 +80,40 @@ def gramatas():
     conn.close()
     return render_template('gramatas.html', books=books)
 
-
-
 @app.route('/rediget/<int:id>', methods=('GET', 'POST'))
 def rediget(id):
     conn = get_db()
     if request.method == 'POST':
         title = request.form['title']
         gads = request.form['gads']
-        author_id = request.form['author_id'] # Saņemam ID no dropdown
+        author_id = request.form['author_id']
         zanrs_id = request.form['zanrs_id']
         
-        # Atjauninām datubāzi ar jauno autora ID
-        conn.execute('UPDATE books SET title=?, gads=?, author_id=?, zanrs_id=? WHERE id=?', 
-                     (title, gads, author_id, zanrs_id, id))
+        # Bilžu apstrāde
+        bilde = request.files.get('bilde')
+        if bilde and bilde.filename != '':
+            # Ja ir ielikta jauna bilde, saglabājam to
+            bildes_nosaukums = bilde.filename
+            bilde.save(f"static/gramatas/{bildes_nosaukums}")
+            # Atjaunojam visu, ieskaitot bildi
+            conn.execute('''
+                UPDATE books 
+                SET title=?, gads=?, author_id=?, zanrs_id=?, bilde=? 
+                WHERE id=?
+            ''', (title, gads, author_id, zanrs_id, bildes_nosaukums, id))
+        else:
+            # Ja jauna bilde nav ielikta, atjaunojam tikai tekstus
+            conn.execute('''
+                UPDATE books 
+                SET title=?, gads=?, author_id=?, zanrs_id=? 
+                WHERE id=?
+            ''', (title, gads, author_id, zanrs_id, id))
+            
         conn.commit()
         conn.close()
         return redirect(url_for('gramatas'))
     
-    # Dabūjam konkrēto grāmatu
     book = conn.execute('SELECT * FROM books WHERE id=?', (id,)).fetchone()
-    # Dabūjam visus žanrus un visus autorus sarakstiem
     zanri = conn.execute('SELECT * FROM zanri').fetchall()
     autori = conn.execute('SELECT * FROM authors ORDER BY name ASC').fetchall()
     conn.close()

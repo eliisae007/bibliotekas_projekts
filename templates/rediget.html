@@ -3,9 +3,9 @@
 <div class="row justify-content-center">
     <div class="col-md-6">
         <div class="card shadow p-4">
-            <h3 style="color: var(--dark-rose);" class="mb-4">Labot grāmatu: {{ book.title }}</h3>
+            <h3 style="color: var(--dark-rose);" class="mb-4">Labot grāmatu</h3>
             
-            <form method="POST">
+            <form method="POST" enctype="multipart/form-data">
                 <div class="mb-3">
                     <label class="form-label font-weight-bold">Grāmatas nosaukums</label>
                     <input type="text" name="title" class="form-control" value="{{ book.title }}" required>
@@ -21,7 +21,7 @@
                                 </option>
                             {% endfor %}
                         </select>
-                        <a href="/pievienot_autoru" class="btn btn-outline-rose" title="Pievienot jaunu autoru">+</a>
+                        <a href="/pievienot_autoru" class="btn btn-outline-rose">+</a>
                     </div>
                 </div>
 
@@ -39,6 +39,18 @@
                             </option>
                         {% endfor %}
                     </select>
+                </div>
+
+                <div class="mb-4">
+                    <label class="form-label font-weight-bold">Grāmatas vāks</label>
+                    {% if book.bilde %}
+                        <div class="mb-2">
+                            <small class="text-muted d-block">Pašreizējā bilde:</small>
+                            <img src="{{ url_for('static', filename='gramatas/' + book.bilde) }}" alt="Pašreizējā" style="height: 80px; border-radius: 5px;">
+                        </div>
+                    {% endif %}
+                    <input type="file" name="bilde" class="form-control" accept="image/*">
+                    <small class="text-muted">Atstāj tukšu, ja nevēlies mainīt esošo bildi.</small>
                 </div>
 
                 <div class="mt-4">
