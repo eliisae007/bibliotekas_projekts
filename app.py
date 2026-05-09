@@ -188,6 +188,12 @@ def pievienot():
     conn.close()
     return render_template('pievienot.html', zanri=zanri, autori=autori)
 
+# Kļūdu apstrāde 404 (Lapa nav atrasta)
+@app.errorhandler(404)
+def page_not_found(e):
+    # Atgriežam 404.html sagatavi un statusa kodu 404
+    return render_template('404.html'), 404
+
 if __name__ == '__main__':
     app.run(debug=True) # debug=True palīdz redzēt kļūdas, ja kaut kas salūzt
 
