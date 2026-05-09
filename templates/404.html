@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row justify-content-center mt-5 mb-5">
+    <div class="col-md-6 text-center">
+        <div class="card shadow p-5 border-0">
+            <h1 class="display-1 fw-bold" style="color: var(--dark-rose);">404</h1>
+            
+            <h2 class="mb-3">Lapa nav atrasta</h2>
+            <p class="text-muted mb-4">Atvainojiet, bet lapa, kuru meklējat, neeksistē vai ir tikusi pārvietota.</p>
+            
+            <a href="{{ url_for('index') }}" class="btn btn-rose btn-lg px-4">
+                Atgriezties sākumlapā
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}
